@@ -1,0 +1,70 @@
+{% extends "sipms/index.html" %}
+{% block body %}
+
+<h2>SiPM {{ sipm.channel }}</h2>
+
+<h3>Parameters</h3>
+<ul>
+  <li><strong>Layer:</strong> {{ sipm.layer }}</li>
+  <li><strong>DAQ ID:</strong> {{ sipm.daq_id }}</li>
+  <li><strong>ASIC:</strong> {{ sipm.asic }}</li>
+  <li><strong>Channel:</strong> {{ sipm.channel }}</li>
+</ul>
+
+<h3>Finger plots (8 voltages)</h3>
+
+{% if sipm.gain_measurements.all %}
+  <div style="display:flex;flex-wrap:wrap;gap:1rem;">
+    {% for gm in sipm.gain_measurements.all %}
+      {% if gm.plot_image %}
+        <figure style="flex:0 0 600px;width:600px;margin:0;">
+          <img src="{{ gm.plot_image.url }}"
+               alt="Gain plot {{ gm.voltage }} V"
+               style="width:100%;height:auto;border:1px solid #ddd;border-radius:6px;">
+        </figure>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="muted">No gain plots uploaded for this SiPM yet.</p>
+{% endif %}
+
+
+<h3>Mean Peak Distances</h3>
+
+{% if sipm.gain_measurements.all %}
+  <div class="table-responsive mt-2">
+    <table class="table table-sm table-striped align-middle gain-table">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Voltage [V]</th>
+          <th scope="col">Mean peak distance</th>
+          <th scope="col">Sigma</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for gm in sipm.gain_measurements.all %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ gm.voltage|floatformat:1 }}</td>
+            <td title="{{ gm.mean_peak_distance }}">
+              {{ gm.mean_peak_distance|floatformat:4 }}
+            </td>
+            <td title="{{ gm.sigma }}">
+              {{ gm.sigma|floatformat:4 }}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p class="text-muted">No gain measurements.</p>
+{% endif %}
+
+
+
+
+{% endblock %}
+

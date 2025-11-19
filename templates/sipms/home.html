@@ -1,0 +1,35 @@
+{% extends "sipms/index.html" %}
+{% load static %}
+{% block body %}
+
+<h2 class="mb-3">Overview</h2>
+<ul>
+  <li>SiPMs on ACS board: {{ sipm_count }}</li>
+</ul>
+
+<h2 class="mt-4 mb-3">Quick search</h2>
+
+<form action="{% url 'quick_search' %}" method="get" class="row g-2 mb-4">
+  <div class="col-auto">
+    <input type="text"
+           name="q"
+           class="form-control"
+           placeholder="Search by channel…">
+  </div>
+  <div class="col-auto">
+    <button type="submit" class="btn btn-primary">
+      Search
+    </button>
+  </div>
+</form>
+
+<div class="d-flex justify-content-center">
+  <figure class="m-0" style="max-width:900px;width:100%;">
+    <img src="{% static 'img/map.jpg' %}"
+         alt="ACS board map"
+         class="img-fluid border rounded">
+  </figure>
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,52 @@
+{% extends "sipms/index.html" %}
+{% block body %}
+
+<h2 class="mb-3">Search results</h2>
+
+<form action="{% url 'quick_search' %}" method="get" class="row g-2 mb-3">
+  <div class="col-auto">
+    <input type="text"
+           name="q"
+           value="{{ q }}"
+           class="form-control"
+           placeholder="Search by channel…">
+  </div>
+  <div class="col-auto">
+    <button type="submit" class="btn btn-primary">Search</button>
+  </div>
+</form>
+
+{% if results %}
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">Channel</th>
+          <th scope="col">Layer</th>
+          <th scope="col">DAQ ID</th>
+          <th scope="col">ASIC</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in results %}
+          <tr>
+            <td>
+              <a href="{% url 'sipm_detail' s.id %}"
+                 class="link-primary text-decoration-none">
+                {{ s.channel }}
+              </a>
+            </td>
+            <td>{{ s.layer }}</td>
+            <td>{{ s.daq_id }}</td>
+            <td>{{ s.asic }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p class="text-muted">No results.</p>
+{% endif %}
+
+{% endblock %}
+
